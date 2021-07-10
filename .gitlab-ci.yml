@@ -1,9 +1,21 @@
 stages:
  - test
  - build
+ - deploy
 
 build:
   image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
   stage: build
   script:
     - make
+
+pages:
+  stage: deploy
+  image: hrektts/doxygen:latest
+  script:
+    - doxygen .doxygen/Doxyfile
+  artifacts:
+    paths:
+      - doc/html
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
