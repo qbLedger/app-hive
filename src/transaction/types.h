@@ -25,3 +25,11 @@ typedef struct {
     uint8_t *memo;      /// memo (variable length)
     uint64_t memo_len;  /// length of memo (8 bytes)
 } transaction_t;
+
+typedef struct {
+    uint16_t ref_block_num;
+    uint32_t ref_block_prefix;
+    uint32_t expiration;
+    // operations
+    // extensions
+} hive_transaction_t;

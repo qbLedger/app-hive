@@ -1,0 +1,9 @@
+stages:
+ - test
+ - build
+
+ build:
+  image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+  stage: build
+  script:
+    - make

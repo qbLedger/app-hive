@@ -1,6 +1,22 @@
 {
     "files.associations": {
-        "*.h": "c"
+        "*.h": "c",
+        "__hash_table": "c",
+        "algorithm": "c",
+        "deque": "c",
+        "locale": "c",
+        "memory": "c",
+        "random": "c",
+        "regex": "c",
+        "string": "c",
+        "type_traits": "c",
+        "valarray": "c",
+        "vector": "c",
+        "*.inc": "c",
+        "*.tcc": "c",
+        "ranges": "c",
+        "*.def": "c",
+        "rope": "c"
     },
     "C_Cpp.clang_format_path": "/usr/bin/clang-format",
     "editor.formatOnSave": true
