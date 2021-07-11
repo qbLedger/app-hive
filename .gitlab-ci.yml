@@ -16,11 +16,11 @@ build:
     - if: $CI_COMMIT_TAG
   parallel:
     matrix:
-      - SDK: [$$NANOS_SDK, $$NANOX_SDK]
+      - SDK: [NANOS_SDK, NANOX_SDK]
   script:
     - mkdir -p out
     - echo $SDK
-    - BOLOS_SDK="$SDK" make clean && BOLOS_SDK="$SDK" make
+    - BOLOS_SDK=$"$SDK" make clean && BOLOS_SDK=$"$SDK" make
     - cp bin/app.hex out/$NANOS_APP
   artifacts:
     paths:
