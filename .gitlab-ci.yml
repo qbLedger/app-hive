@@ -16,7 +16,7 @@ build:
     - if: $CI_COMMIT_TAG
   parallel:
     matrix:
-      - SDK: ["$NANOS_SDK", "$NANOX_SDK"]
+      - SDK: ["$$NANOS_SDK", "$$NANOX_SDK"]
   script:
     - mkdir -p out
     - BOLOS_SDK=$SDK make clean && BOLOS_SDK=$SDK make
