@@ -20,7 +20,7 @@ build:
   script:
     - mkdir -p out
     - echo ${!SDK}
-    - BOLOS_SDK=${!SDK}" make clean && BOLOS_SDK=${!SDK} make
+    - BOLOS_SDK=${!SDK} make clean && BOLOS_SDK=${!SDK} make
     - cp bin/app.hex out/$NANOS_APP
   artifacts:
     paths:
