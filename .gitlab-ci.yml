@@ -19,11 +19,8 @@ build:
       - SDK: [NANOS_SDK, NANOX_SDK]
   script:
     - mkdir -p out
-    - echo $SDK
-    - echo $"$SDK"
-    - echo $$SDK
-    - echo "$"$SDK
-    - BOLOS_SDK=$"$SDK" make clean && BOLOS_SDK=$"$SDK" make
+    - echo ${!SDK}
+    - BOLOS_SDK=${!SDK}" make clean && BOLOS_SDK=${!SDK} make
     - cp bin/app.hex out/$NANOS_APP
   artifacts:
     paths:
