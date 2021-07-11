@@ -5,7 +5,7 @@ stages:
  - upload
  - release
 
- variables:
+variables:
   PACKAGE_VERSION: $CI_COMMIT_TAG
   NANOS_APP: "nanos-${PACKAGE_VERSION}.hex"
   NANOX_APP: "nanox-${PACKAGE_VERSION}"
