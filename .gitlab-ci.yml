@@ -6,10 +6,9 @@ stages:
  - release
 
 variables:
-  PACKAGE_VERSION: $CI_COMMIT_TAG
-  NANOS_APP: "nanos-${PACKAGE_VERSION}.hex"
-  NANOX_APP: "nanox-${PACKAGE_VERSION}"
-  PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/hive/${PACKAGE_VERSION}"
+  NANOS_APP: "nanos-$CI_COMMIT_TAG.hex"
+  NANOX_APP: "nanox-$CI_COMMIT_TAG.hex"
+  PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/hive/$CI_COMMIT_TAG"
 
 build:
   image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
@@ -21,7 +20,7 @@ build:
     - make clean && make
     - cp bin/app.hex out/${NANOS_APP}
     - make clean && BOLOS_SDK=$NANOX_SDK make
-    - cp bin/app.hex out/#{NANOX_APP}
+    - cp bin/app.hex out/${NANOX_APP}
   artifacts:
     paths:
       - out/
