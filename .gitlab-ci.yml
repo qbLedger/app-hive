@@ -1,21 +1,51 @@
 stages:
  - test
  - build
- - deploy
+ - build
+ - upload
+ - release
+
+ variables:
+  PACKAGE_VERSION: $CI_COMMIT_TAG
+  NANOS_APP: "nanos-${PACKAGE_VERSION}.hex"
+  NANOX_APP: "nanox-${PACKAGE_VERSION}"
+  PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/hive/${PACKAGE_VERSION}"
 
 build:
   image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
   stage: build
+  rules:
+    - if: $CI_COMMIT_TAG
   script:
-    - make
-
-pages:
-  stage: deploy
-  image: hrektts/doxygen:latest
-  script:
-    - doxygen .doxygen/Doxyfile
+    - mkdir -p out
+    - make clean && make
+    - cp bin/app.hex out/${NANOS_APP}
+    - make clean && BOLOS_SDK=$NANOX_SDK make
+    - cp bin/app.hex out/#{NANOX_APP}
   artifacts:
     paths:
-      - doc/html
+      - out/
+
+upload:
+  stage: upload
+  image: curlimages/curl:latest
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: $CI_COMMIT_TAG
+  script:
+    - |
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file out/${NANOX_APP} ${PACKAGE_REGISTRY_URL}/${NANOX_APP}
+    - |
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file out/${NANOS_APP} ${PACKAGE_REGISTRY_URL}/${NANOS_APP}
+
+release:
+  # Caution, as of 2021-02-02 these assets links require a login, see:
+  # https://gitlab.com/gitlab-org/gitlab/-/issues/299384
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - |
+      release-cli create --name "Release $CI_COMMIT_TAG" --tag-name $CI_COMMIT_TAG \
+        --assets-link "{\"name\":\"${NANOX_APP}\",\"url\":\"${PACKAGE_REGISTRY_URL}/${NANOX_APP}\"}" \
+        --assets-link "{\"name\":\"${NANOS_APP}\",\"url\":\"${PACKAGE_REGISTRY_URL}/${NANOS_APP}\"}"

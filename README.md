@@ -52,3 +52,9 @@ It outputs 4 artifacts:
 - `speculos-log` within APDU command/response when executing end-to-end tests
 - `code-coverage` within HTML details of code coverage
 - `documentation` within HTML auto-generated documentation
+
+
+
+# Local development
+
+`docker run --rm -ti -v "$(realpath .):/app" ledger-app-builder:latest make` 
