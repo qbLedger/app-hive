@@ -30,6 +30,7 @@
 #include "../sw.h"
 #include "../crypto.h"
 #include "../common/buffer.h"
+#include "../common/wif.h"
 #include "../ui/display.h"
 #include "../helper/send_response.h"
 
@@ -55,6 +56,11 @@ int handler_get_public_key(buffer_t *cdata, bool display) {
     crypto_init_public_key(&private_key, &public_key, G_context.pk_info.raw_public_key);
     // reset private key
     explicit_bzero(&private_key, sizeof(private_key));
+
+    wif_from_public_key(G_context.pk_info.raw_public_key,
+                        sizeof(G_context.pk_info.raw_public_key),
+                        G_context.pk_info.wif,
+                        sizeof(G_context.pk_info.wif));
 
     if (display) {
         return ui_display_address();

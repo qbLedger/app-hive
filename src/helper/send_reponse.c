@@ -25,15 +25,46 @@
 #include "../sw.h"
 #include "common/buffer.h"
 
+// uint32_t get_public_key_and_set_result() {
+//     uint32_t tx = 0;
+//     // publickey length
+//     G_io_apdu_buffer[tx++] = 65;
+
+//     // copy publickey
+//     os_memmove(G_io_apdu_buffer + tx, tmpCtx.publicKeyContext.publicKey.W, 65);
+//     tx += 65;
+
+//     uint32_t addressLength = strlen(tmpCtx.publicKeyContext.address);
+
+//     // wif length
+//     G_io_apdu_buffer[tx++] = addressLength;
+
+//     // copy wif
+//     os_memmove(G_io_apdu_buffer + tx, tmpCtx.publicKeyContext.address, addressLength);
+//     tx += addressLength;
+//     // copy chain code
+//     if (tmpCtx.publicKeyContext.getChaincode) {
+//         os_memmove(G_io_apdu_buffer + tx, tmpCtx.publicKeyContext.chainCode, 32);
+//         tx += 32;
+//     }
+//     return tx;
+// }
+
 int helper_send_response_pubkey() {
-    uint8_t resp[1 + 1 + PUBKEY_LEN + 1 + CHAINCODE_LEN] = {0};
+    uint8_t resp[1 + PUBKEY_LEN + 1 + WIF_LEN + CHAINCODE_LEN] = {0};
     size_t offset = 0;
 
-    resp[offset++] = PUBKEY_LEN + 1;
-    resp[offset++] = 0x04;
+    resp[offset++] = PUBKEY_LEN;
+    // resp[offset++] = 0x04;
     memmove(resp + offset, G_context.pk_info.raw_public_key, PUBKEY_LEN);
     offset += PUBKEY_LEN;
-    resp[offset++] = CHAINCODE_LEN;
+
+    uint32_t wifLength = strlen(G_context.pk_info.wif);
+
+    resp[offset++] = wifLength;
+    memmove(resp + offset, G_context.pk_info.wif, wifLength);
+
+    offset += wifLength;
     memmove(resp + offset, G_context.pk_info.chain_code, CHAINCODE_LEN);
     offset += CHAINCODE_LEN;
 

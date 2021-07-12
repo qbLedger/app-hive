@@ -20,6 +20,7 @@
                 "HAVE_HMAC",
                 "HAVE_HASH",
                 "HAVE_SHA224",
+                "HAVE_RIPEMD160",
                 "HAVE_BAGL",
                 "HAVE_SPRINTF",
                 "HAVE_IO_USB",

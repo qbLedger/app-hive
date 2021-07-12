@@ -5,6 +5,10 @@
 #include "../common/macros.h"
 
 /**
+ * Length of WIF.
+ */
+#define WIF_LEN (MEMBER_SIZE(pubkey_ctx_t, wif))
+/**
  * Length of public key.
  */
 #define PUBKEY_LEN (MEMBER_SIZE(pubkey_ctx_t, raw_public_key))

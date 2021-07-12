@@ -1,9 +1,9 @@
 #pragma once
 
 /**
- * Instruction class of the Boilerplate application.
+ * Instruction class of the Hive application.
  */
-#define CLA 0xE0
+#define CLA 0xD4
 
 /**
  * Length of APPNAME variable in the Makefile.
