@@ -1,6 +1,7 @@
 /*****************************************************************************
- *   Ledger App Boilerplate.
+ *   Ledger App Hive.
  *   (c) 2020 Ledger SAS.
+ *   Modifications (c) Bartłomiej @engrave Górnicki
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,10 +20,10 @@
 #include "ux.h"
 #include "glyphs.h"
 
-#include "../globals.h"
+#include "globals.h"
 #include "menu.h"
 
-UX_STEP_NOCB(ux_menu_ready_step, pnn, {&C_hive_logo, "Use wallet to", "view accounts"});
+UX_STEP_NOCB(ux_menu_ready_step, pnn, {&C_hive_logo, "Waiting for", "commands"});
 UX_STEP_NOCB(ux_menu_version_step, bn, {"Version", APPVERSION});
 UX_STEP_CB(ux_menu_about_step, pb, ui_menu_about(), {&C_icon_certificate, "About"});
 UX_STEP_VALID(ux_menu_exit_step, pb, os_sched_exit(-1), {&C_icon_dashboard_x, "Quit"});
@@ -32,12 +33,7 @@ UX_STEP_VALID(ux_menu_exit_step, pb, os_sched_exit(-1), {&C_icon_dashboard_x, "Q
 // #2 screen: version of the app
 // #3 screen: about submenu
 // #4 screen: quit
-UX_FLOW(ux_menu_main_flow,
-        &ux_menu_ready_step,
-        &ux_menu_version_step,
-        &ux_menu_about_step,
-        &ux_menu_exit_step,
-        FLOW_LOOP);
+UX_FLOW(ux_menu_main_flow, &ux_menu_ready_step, &ux_menu_version_step, &ux_menu_about_step, &ux_menu_exit_step, FLOW_LOOP);
 
 void ui_menu_main() {
     if (G_ux.stack_count == 0) {
@@ -47,13 +43,15 @@ void ui_menu_main() {
     ux_flow_init(0, ux_menu_main_flow, NULL);
 }
 
-UX_STEP_NOCB(ux_menu_info_step, bn, {"Boilerplate App", "(c) 2020 Ledger"});
+UX_STEP_NOCB(ux_menu_info_hive_step, bn, {"Hive", "https://hive.io"});
+UX_STEP_NOCB(ux_menu_info_developed_by_step, bn, {"Developed by", "@engrave, @netuoso"});
 UX_STEP_CB(ux_menu_back_step, pb, ui_menu_main(), {&C_icon_back, "Back"});
 
 // FLOW for the about submenu:
-// #1 screen: app info
-// #2 screen: back button to main menu
-UX_FLOW(ux_menu_about_flow, &ux_menu_info_step, &ux_menu_back_step, FLOW_LOOP);
+// #1 screen: chain info
+// #2 screen: developer info
+// #3 screen: back button to main menu
+UX_FLOW(ux_menu_about_flow, &ux_menu_info_hive_step, &ux_menu_info_developed_by_step, &ux_menu_back_step, FLOW_LOOP);
 
 void ui_menu_about() {
     ux_flow_init(0, ux_menu_about_flow, NULL);

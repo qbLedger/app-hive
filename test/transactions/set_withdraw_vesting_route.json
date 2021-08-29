@@ -1,0 +1,18 @@
+{
+    "expiration": "2021-02-23T22:18:08",
+    "ref_block_num": 51593753,
+    "ref_block_prefix": 1842883823,
+    "operations": [
+        [
+            "set_withdraw_vesting_route",
+            {
+                "from_account": "engrave",
+                "to_account": "bgornicki",
+                "percent": "9999",
+                "autovest": false
+            }
+        ]
+    ],
+    "extensions": [],
+    "signatures": []
+}

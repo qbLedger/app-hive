@@ -1,5 +1,5 @@
 # ****************************************************************************
-#    Ledger App Boilerplate
+#    Ledger App Hive
 #    (c) 2020 Ledger SAS.
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -92,9 +92,11 @@ $(info GCCPATH is not set: arm-none-eabi-* will be used from PATH)
 endif
 
 CC      := $(CLANGPATH)clang
+# CFLAGS  += -O0
 CFLAGS  += -O3 -Os
 AS      := $(GCCPATH)arm-none-eabi-gcc
 LD      := $(GCCPATH)arm-none-eabi-gcc
+# LDFLAGS += -O0
 LDFLAGS += -O3 -Os
 LDLIBS  += -lm -lgcc -lc
 

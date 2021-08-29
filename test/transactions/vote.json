@@ -1,0 +1,18 @@
+{
+    "expiration": "2020-05-10T20:13:42",
+    "ref_block_num": 34898,
+    "ref_block_prefix": 3939295900,
+    "operations": [
+        [
+            "vote",
+            {
+                "voter": "engrave",
+                "author": "engrave",
+                "permlink": "introduction",
+                "weight": 10000
+            }
+        ]
+    ],
+    "extensions": [],
+    "signatures": []
+}

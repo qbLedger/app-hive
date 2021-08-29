@@ -1,0 +1,21 @@
+{
+    "expiration": "2021-02-23T22:18:08",
+    "ref_block_num": 51593753,
+    "ref_block_prefix": 1842883823,
+    "operations": [
+        [
+            "create_proposal",
+            {
+                "creator": "engrave",
+                "receiver": "bgornicki",
+                "start_date": "2021-03-26T11:22:39",
+                "end_date": "2022-03-26T11:22:39",
+                "daily_pay": "123.000 SBD",
+                "subject": "Ledger Proposal",
+                "permlink": "engrave-ledger-proposal"
+            }
+        ]
+    ],
+    "extensions": [],
+    "signatures": []
+}

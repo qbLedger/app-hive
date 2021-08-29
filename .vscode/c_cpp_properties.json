@@ -9,6 +9,7 @@
             "includePath": [
                 "/usr/include",
                 "${workspaceFolder}/src",
+                "${workspaceFolder}/dev-env/cmocka/include",
                 "${env:BOLOS_SDK}/include/*",
                 "${env:BOLOS_SDK}/lib_ux/include/*",
                 "${env:BOLOS_SDK}/lib_cxng/include/*"
@@ -17,6 +18,8 @@
                 "TARGET_NANOS",
                 "OS_IO_SEPROXYHAL",
                 "HAVE_ECC",
+                "HAVE_SECP256K1_CURVE",
+                "HAVE_ECC_WEIERSTRASS",
                 "HAVE_HMAC",
                 "HAVE_HASH",
                 "HAVE_SHA224",
@@ -31,7 +34,7 @@
                 "USB_SEGMENT_SIZE=64",
                 "UNUSED(x)=(void)x",
                 "APPVERSION=\"1.0.0\"",
-                "APPNAME=\"Boilerplate\"",
+                "APPNAME=\"Hive\"",
                 "MAJOR_VERSION=1",
                 "MINOR_VERSION=0",
                 "PATCH_VERSION=0",

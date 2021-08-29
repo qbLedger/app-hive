@@ -1,0 +1,21 @@
+{
+    "ref_block_num": 51668402,
+    "ref_block_prefix": 1442053321,
+    "expiration": "2021-02-26T12:38:24",
+    "operations": [
+        [
+            "comment",
+            {
+                "parent_author": "engrave",
+                "parent_permlink": "introduction",
+                "author": "bgornicki",
+                "permlink": "re-introduction-12321",
+                "title": "Re: posted with Ledger",
+                "body": "This comments been signed with Ledger Device",
+                "json_metadata": ""
+            }
+        ]
+    ],
+    "extensions": [],
+    "signatures": []
+}

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../types.h"
+#include "types.h"
 
 /**
  * Parameter 2 for last APDU to receive.
@@ -13,11 +13,11 @@
 /**
  * Parameter 1 for first APDU number.
  */
-#define P1_START 0x00
+#define P1_FIRST_CHUNK 0x00
 /**
- * Parameter 1 for maximum APDU number.
+ * Parameter 1 for subsequent APDU number.
  */
-#define P1_MAX 0x03
+#define P1_SUBSEQUENT_CHUNK 0x80
 
 /**
  * Dispatch APDU command received to the right handler.

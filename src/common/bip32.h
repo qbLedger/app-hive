@@ -1,13 +1,13 @@
 #pragma once
 
-#include <stddef.h>   // size_t
-#include <stdint.h>   // uint*_t
-#include <stdbool.h>  // bool
+#include <stddef.h>
+#include <stdint.h>
+#include <stdbool.h>
 
 /**
- * Maximum length of BIP32 path allowed.
+ * Maximum length of BIP32 path allowed. It is set to 5 to comply with SLIP-0048 standard
  */
-#define MAX_BIP32_PATH 10
+#define MAX_BIP32_PATH 5
 
 /**
  * Read BIP32 path from byte buffer.
@@ -41,7 +41,4 @@ bool bip32_path_read(const uint8_t *in, size_t in_len, uint32_t *out, size_t out
  * @return true if success, false otherwise.
  *
  */
-bool bip32_path_format(const uint32_t *bip32_path,
-                       size_t bip32_path_len,
-                       char *out,
-                       size_t out_len);
+bool bip32_path_format(const uint32_t *bip32_path, size_t bip32_path_len, char *out, size_t out_len);

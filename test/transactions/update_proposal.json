@@ -1,0 +1,27 @@
+{
+    "ref_block_num": 953771,
+    "ref_block_prefix": 1947235149,
+    "expiration": "2021-07-04T19:05:45",
+    "operations": [
+        [
+            "update_proposal",
+            {
+                "proposal_id": 1337,
+                "creator": "engrave",
+                "daily_pay": "136.340 SBD",
+                "subject": "Test proposal",
+                "permlink": "introduction",
+                "extensions": [
+                    [
+                        1,
+                        {
+                            "end_date": "2022-01-29T11:22:39"
+                        }
+                    ]
+                ]
+            }
+        ]
+    ],
+    "extensions": [],
+    "signatures": []
+}

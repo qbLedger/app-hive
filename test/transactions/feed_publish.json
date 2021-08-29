@@ -1,0 +1,19 @@
+{
+    "expiration": "2021-02-23T22:18:08",
+    "ref_block_num": 51593753,
+    "ref_block_prefix": 1842883823,
+    "operations": [
+        [
+            "feed_publish",
+            {
+                "publisher": "engrave",
+                "exchange_rate": {
+                    "base": "0.245 SBD",
+                    "quote": "1.000 STEEM"
+                }
+            }
+        ]
+    ],
+    "extensions": [],
+    "signatures": []
+}

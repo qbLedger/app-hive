@@ -1,0 +1,36 @@
+{
+    "expiration": "2021-03-01T10:55:09",
+    "ref_block_num": 44459,
+    "ref_block_prefix": 4057491244,
+    "operations": [
+        [
+            "recover_account",
+            {
+                "account_to_recover": "engrave",
+                "new_owner_authority": {
+                    "weight_threshold": 1,
+                    "account_auths": [],
+                    "key_auths": [
+                        [
+                            "STM7u61uEZaeonfCgYNnuoakT7A9uSYd8Vh2RH4nzcavwS6yGRNi2",
+                            1
+                        ]
+                    ]
+                },
+                "recent_owner_authority": {
+                    "weight_threshold": 1,
+                    "account_auths": [],
+                    "key_auths": [
+                        [
+                            "STM5r6G7EsPUUPYojYhd9nt8dEZ4fwBNUbz2nQyxXHf56ccqVKGFg",
+                            1
+                        ]
+                    ]
+                },
+                "extensions": []
+            }
+        ]
+    ],
+    "extensions": [],
+    "signatures": []
+}

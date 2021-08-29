@@ -1,0 +1,17 @@
+{
+    "ref_block_num": 51668639,
+    "ref_block_prefix": 191783206,
+    "expiration": "2021-02-26T12:50:14",
+    "operations": [
+        [
+            "change_recovery_account",
+            {
+                "account_to_recover": "bgornicki",
+                "new_recovery_account": "engrave",
+                "extensions": []
+            }
+        ]
+    ],
+    "extensions": [],
+    "signatures": []
+}
