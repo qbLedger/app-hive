@@ -1,21 +1,74 @@
-# Boilerplate commands
+# Hive application commands
 
 ## Overview
 
 | Command name | INS | Description |
 | --- | --- | --- |
-| `GET_VERSION` | 0x03 | Get application version as `MAJOR`, `MINOR`, `PATCH` |
-| `GET_APP_NAME` | 0x04 | Get ASCII encoded application name |
-| `GET_PUBLIC_KEY` | 0x05 | Get public key given BIP32 path |
-| `SIGN_TX` | 0x06 | Sign transaction given BIP32 path and raw transaction |
+| `GET_PUBLIC_KEY` | 0x02 | Get public key given BIP32 path (SLIP-0048) |
+| `SIGN_TRANSACTION` | 0x04 | Sign transaction given BIP32 path (SLIP-0048) and  DER encoded transaction |
+| `GET_VERSION` | 0x06 |  Get application version as `MAJOR`, `MINOR`, `PATCH` buffer|
+| `GET_APP_NAME` | 0x08 | Get ASCII encoded application name |
 
-## GET_VERSION
+## GET_PUBLIC_KEY
+
+This command returns public key (both raw and WIF format) and chain code. Public key can be derived from BIP 32 path, which have to comply with SLIP-0048 standard (max derivation path is set to 5).
+
+Public key can be optionaly reviewed and accepted by user before being returned (P1 = 0x01).
 
 ### Command
 
 | CLA | INS | P1 | P2 | Lc | CData |
 | --- | --- | --- | --- | --- | --- |
-| 0xE0 | 0x03 | 0x00 | 0x00 | 0x00 | - |
+| 0xD4 | 0x02 | 0x00 (no display) <br> 0x01 (ask user to confirm before returning the key) | 0x00 | 1 + 4n | `len(bip32_path) (1)` \|\|<br> `bip32_path{1} (4)` \|\|<br>`...` \|\|<br>`bip32_path{n} (4)` |
+
+### Response
+
+| Response length (bytes) | SW | RData |
+| --- | --- | --- |
+| var | 0x9000 | `len(public_key) (1)` \|\|<br> `public_key (var)` \|\|<br> `len(wif) (1)` \|\|<br> `wif (var)` \|\|<br> `chain code (32)`|
+
+## SIGN_TRANSACTION
+
+This command signs provided transaction with key derived from BIP 32 path (which must comply with SLIP-0048 standard). Transaction mu be accepted by the user.
+
+Input data is BIP 32 path followed by ASN1 DER encoded transaction (each transaction field is encoded as a StringOctet type), sent to the device in 255 bytes maximum data chunks.
+
+If there is a need to send more than one APDU (i.e transaction is big enought to exceed 250 bytes), BIP 32 path should be only sent in the first chunk.
+
+Transaction fields have to be sent in following order:
+
+ * chain id
+ * ref_block_num
+ * ref_block_prefix
+ * expiration
+ * number of operations
+ * operation
+ * number of extensions
+
+Currently, only single operation transactions are supported. App will refuse transaction which contains `number of operations` other than 1. Number of extensions have to be zero, otherwise transaction will be rejected.
+
+
+### Command
+
+| CLA | INS | P1 | P2 | Lc | CData |
+| --- | --- | --- | --- | --- | --- |
+| 0xD4 | 0x04 | 0x00 (first chunk) <br> 0x80 (subsequent chunk) | 0x00 (last chunk) <br> 0x80 (expect more) | 1 + 4n | **First chunk**:<br> `len(bip32_path) (1)` \|\|<br> `bip32_path{1} (4)` \|\|<br>`...` \|\|<br>`bip32_path{n} (4)` \|\|<br>`DER encoded transaction (var)`<br><br>**Subsequent chunk (optional)**:<br>`DER encoded transaction (var)`|
+
+### Response
+
+| Response length (bytes) | SW | RData |
+| --- | --- | --- |
+| var | 0x9000 | `signature (33)` |
+
+
+## GET_VERSION
+
+
+### Command
+
+| CLA | INS | P1 | P2 | Lc | CData |
+| --- | --- | --- | --- | --- | --- |
+| 0xD4 | 0x06 | 0x00 | 0x00 | 0x00 | - |
 
 ### Response
 
@@ -29,41 +82,13 @@
 
 | CLA | INS | P1 | P2 | Lc | CData |
 | --- | --- | --- | --- | --- | --- |
-| 0xE0 | 0x04 | 0x00 | 0x00 | 0x00 | - |
+| 0xD4 | 0x08 | 0x00 | 0x00 | 0x00 | - |
 
 ### Response
 
 | Response length (bytes) | SW | RData |
 | --- | --- | --- |
 | var | 0x9000 | `APPNAME (var)` |
-
-## GET_PUBLIC_KEY
-
-### Command
-
-| CLA | INS | P1 | P2 | Lc | CData |
-| --- | --- | --- | --- | --- | --- |
-| 0xE0 | 0x05 | 0x00 (no display) <br> 0x01 (display) | 0x00 | 1 + 4n | `len(bip32_path) (1)` \|\|<br> `bip32_path{1} (4)` \|\|<br>`...` \|\|<br>`bip32_path{n} (4)` |
-
-### Response
-
-| Response length (bytes) | SW | RData |
-| --- | --- | --- |
-| var | 0x9000 | `len(public_key) (1)` \|\|<br> `public_key (var)` \|\|<br> `len(chain_code) (1)` \|\|<br> `chain_code (var)` |
-
-## SIGN_TX
-
-### Command
-
-| CLA | INS | P1 | P2 | Lc | CData |
-| --- | --- | --- | --- | --- | --- |
-| 0xE0 | 0x06 | 0x00-0x03 (chunk index) | 0x00 (more) <br> 0x80 (last) | 1 + 4n | `len(bip32_path) (1)` \|\|<br> `bip32_path{1} (4)` \|\|<br>`...` \|\|<br>`bip32_path{n} (4)` |
-
-### Response
-
-| Response length (bytes) | SW | RData |
-| --- | --- | --- |
-| var | 0x9000 | `len(signature) (1)` \|\| <br> `signature (var)` \|\| <br> `v (1)`|
 
 
 ## Status Words
@@ -76,12 +101,9 @@
 | 0x6D00 | `SW_INS_NOT_SUPPORTED` | No command exists with `INS` |
 | 0x6E00 | `SW_CLA_NOT_SUPPORTED` | Bad `CLA` used for this application |
 | 0xB000 | `SW_WRONG_RESPONSE_LENGTH` | Wrong response lenght (buffer size problem) |
-| 0xB001 | `SW_DISPLAY_BIP32_PATH_FAIL` | BIP32 path conversion to string failed |
-| 0xB002 | `SW_DISPLAY_ADDRESS_FAIL` | Address conversion to string failed |
-| 0xB003 | `SW_DISPLAY_AMOUNT_FAIL` | Amount conversion to string failed |
-| 0xB004 | `SW_WRONG_TX_LENGTH` | Wrong raw transaction lenght |
-| 0xB005 | `SW_TX_PARSING_FAIL` | Failed to parse raw transaction |
-| 0xB006 | `SW_TX_HASH_FAIL` | Failed to compute hash digest of raw transaction |
-| 0xB007 | `SW_BAD_STATE` | Security issue with bad state |
-| 0xB008 | `SW_SIGNATURE_FAIL` | Signature of raw transaction failed |
-| 0x9000 | `OK` | Success |
+| 0xB001 | `SW_WRONG_BIP32_PATH` | BIP32 path conversion to string failed |
+| 0xB002 | `SW_WRONG_TX_LENGTH` | Wrong raw transaction lenght |
+| 0xB003 | `SW_TX_PARSING_FAIL` | Failed to parse raw transaction |
+| 0xB004 | `SW_BAD_STATE` | Security issue with bad state |
+| 0xB005 | `SW_SIGNATURE_FAIL` | Signature of raw transaction failed |
+| 0x9000 | `SW_OK` | Success |

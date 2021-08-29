@@ -1,0 +1,20 @@
+{
+    "expiration": "2021-02-23T22:18:08",
+    "ref_block_num": 51593753,
+    "ref_block_prefix": 1842883823,
+    "operations": [
+        [
+            "recurrent_transfer",
+            {
+                "from": "engrave",
+                "to": "bgornicki",
+                "amount": "1.337 STEEM",
+                "executions": 4,
+                "recurrence": 168,
+                "memo": "Sent with ledger"
+            }
+        ]
+    ],
+    "extensions": [],
+    "signatures": []
+}

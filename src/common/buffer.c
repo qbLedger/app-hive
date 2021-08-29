@@ -1,5 +1,7 @@
 /*****************************************************************************
+ *   Ledger App Hive
  *   (c) 2020 Ledger SAS.
+ *   Modifications (c) 2021 Bartłomiej (@engrave) Górnicki
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,8 +23,9 @@
 
 #include "buffer.h"
 #include "read.h"
-#include "varint.h"
 #include "bip32.h"
+
+#include "asn1.h"
 
 bool buffer_can_read(const buffer_t *buffer, size_t n) {
     return buffer->size - buffer->offset >= n;
@@ -79,8 +82,7 @@ bool buffer_read_u16(buffer_t *buffer, uint16_t *value, endianness_t endianness)
         return false;
     }
 
-    *value = ((endianness == BE) ? read_u16_be(buffer->ptr, buffer->offset)
-                                 : read_u16_le(buffer->ptr, buffer->offset));
+    *value = ((endianness == BE) ? read_u16_be(buffer->ptr, buffer->offset) : read_u16_le(buffer->ptr, buffer->offset));
 
     buffer_seek_cur(buffer, 2);
 
@@ -94,8 +96,7 @@ bool buffer_read_u32(buffer_t *buffer, uint32_t *value, endianness_t endianness)
         return false;
     }
 
-    *value = ((endianness == BE) ? read_u32_be(buffer->ptr, buffer->offset)
-                                 : read_u32_le(buffer->ptr, buffer->offset));
+    *value = ((endianness == BE) ? read_u32_be(buffer->ptr, buffer->offset) : read_u32_le(buffer->ptr, buffer->offset));
 
     buffer_seek_cur(buffer, 4);
 
@@ -109,37 +110,40 @@ bool buffer_read_u64(buffer_t *buffer, uint64_t *value, endianness_t endianness)
         return false;
     }
 
-    *value = ((endianness == BE) ? read_u64_be(buffer->ptr, buffer->offset)
-                                 : read_u64_le(buffer->ptr, buffer->offset));
+    *value = ((endianness == BE) ? read_u64_be(buffer->ptr, buffer->offset) : read_u64_le(buffer->ptr, buffer->offset));
 
     buffer_seek_cur(buffer, 8);
 
     return true;
 }
 
-bool buffer_read_varint(buffer_t *buffer, uint64_t *value) {
-    int length = varint_read(buffer->ptr + buffer->offset, buffer->size - buffer->offset, value);
-
-    if (length < 0) {
-        *value = 0;
-
-        return false;
-    }
-
-    buffer_seek_cur(buffer, (size_t) length);
-
-    return true;
-}
-
 bool buffer_read_bip32_path(buffer_t *buffer, uint32_t *out, size_t out_len) {
-    if (!bip32_path_read(buffer->ptr + buffer->offset,
-                         buffer->size - buffer->offset,
-                         out,
-                         out_len)) {
+    if (!bip32_path_read(buffer->ptr + buffer->offset, buffer->size - buffer->offset, out, out_len)) {
         return false;
     }
 
     buffer_seek_cur(buffer, sizeof(*out) * out_len);
+
+    return true;
+}
+
+bool buffer_read_tlv(buffer_t *buffer, uint8_t *out, size_t out_len, uint8_t *tag, uint32_t *length) {
+    if (!der_decode_tag(buffer, tag) || !der_decode_length(buffer, length)) {
+        return false;
+    }
+
+    if (*length == 0) {
+        // skip zero length fields
+        return true;
+    }
+
+    if (out_len < *length) {
+        return false;
+    }
+
+    if (!buffer_move_partial(buffer, out, out_len, *length)) {
+        return false;
+    }
 
     return true;
 }
@@ -154,12 +158,31 @@ bool buffer_copy(const buffer_t *buffer, uint8_t *out, size_t out_len) {
     return true;
 }
 
+bool buffer_copy_partial(const buffer_t *buffer, uint8_t *out, size_t out_len, uint8_t length) {
+    if (length > out_len || buffer->size - buffer->offset < length) {
+        return false;
+    }
+
+    memmove(out, buffer->ptr + buffer->offset, length);
+
+    return true;
+}
 bool buffer_move(buffer_t *buffer, uint8_t *out, size_t out_len) {
     if (!buffer_copy(buffer, out, out_len)) {
         return false;
     }
 
     buffer_seek_cur(buffer, out_len);
+
+    return true;
+}
+
+bool buffer_move_partial(buffer_t *buffer, uint8_t *out, size_t out_len, uint8_t length) {
+    if (!buffer_copy_partial(buffer, out, out_len, length)) {
+        return false;
+    }
+
+    buffer_seek_cur(buffer, length);
 
     return true;
 }

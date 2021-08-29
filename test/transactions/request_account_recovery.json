@@ -1,0 +1,26 @@
+{
+    "expiration": "2021-02-23T22:18:08",
+    "ref_block_num": 51593753,
+    "ref_block_prefix": 1842883823,
+    "operations": [
+        [
+            "request_account_recovery",
+            {
+                "recovery_account": "engrave",
+                "account_to_recover": "bgornicki",
+                "new_owner_authority": {
+                    "weight_threshold": 1,
+                    "account_auths": [],
+                    "key_auths": [
+                        [
+                            "STM5r6G7EsPUUPYojYhd9nt8dEZ4fwBNUbz2nQyxXHf56ccqVKGFg",
+                            1
+                        ]
+                    ]
+                }
+            }
+        ]
+    ],
+    "extensions": [],
+    "signatures": []
+}

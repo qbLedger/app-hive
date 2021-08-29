@@ -1,4 +1,5 @@
 /*****************************************************************************
+ *   Ledger App Hive
  *   (c) 2020 Ledger SAS.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");

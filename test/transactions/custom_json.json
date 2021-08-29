@@ -1,0 +1,20 @@
+{
+    "expiration": "2021-03-01T10:55:09",
+    "ref_block_num": 44459,
+    "ref_block_prefix": 4057491244,
+    "operations": [
+        [
+            "custom_json",
+            {
+                "required_auths": [],
+                "required_posting_auths": [
+                    "engrave"
+                ],
+                "id": "notify",
+                "json": "[\"setLastRead\",{\"date\":\"2021-03-01T10:43:15\"}]"
+            }
+        ]
+    ],
+    "extensions": [],
+    "signatures": []
+}

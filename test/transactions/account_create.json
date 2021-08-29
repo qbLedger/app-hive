@@ -1,0 +1,49 @@
+{
+    "expiration": "2021-02-23T22:18:08",
+    "ref_block_num": 51593753,
+    "ref_block_prefix": 1842883823,
+    "operations": [
+        [
+            "account_create",
+            {
+                "creator": "engrave",
+                "new_account_name": "engrave.ledger",
+                "fee": "3.000 STEEM",
+                "owner": {
+                    "weight_threshold": 1,
+                    "account_auths": [],
+                    "key_auths": [
+                        [
+                            "STM5r6G7EsPUUPYojYhd9nt8dEZ4fwBNUbz2nQyxXHf56ccqVKGFg",
+                            1
+                        ]
+                    ]
+                },
+                "active": {
+                    "weight_threshold": 1,
+                    "account_auths": [],
+                    "key_auths": [
+                        [
+                            "STM6Ex55kgT6YnzpAFFB5Y4kUWhNUvLukgJpPqVVwebXqur6QD1Yy",
+                            1
+                        ]
+                    ]
+                },
+                "posting": {
+                    "weight_threshold": 1,
+                    "account_auths": [],
+                    "key_auths": [
+                        [
+                            "STM57zUjDUTq2xnfoPA8ukKB6SY4jVPknkiNrEWZdZi2XgnK6J3yc",
+                            1
+                        ]
+                    ]
+                },
+                "memo_key": "STM7vws7RdiBQiegnzjA3wYdemLENGbw765iA8VhE4UYCgS48yMr3",
+                "json_metadata": "{\"name\": \"John Doe\"}"
+            }
+        ]
+    ],
+    "extensions": [],
+    "signatures": []
+}

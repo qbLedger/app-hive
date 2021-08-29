@@ -1,6 +1,7 @@
 /*****************************************************************************
  *   Ledger App Hive.
  *   (c) 2020 Ledger SAS.
+ *   Modifications (c) 2021 Bartłomiej (@engrave) Górnicki
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,16 +20,16 @@
 #include <stdbool.h>
 
 #include "dispatcher.h"
-#include "../constants.h"
-#include "../globals.h"
-#include "../types.h"
-#include "../io.h"
-#include "../sw.h"
-#include "../common/buffer.h"
-#include "../handler/get_version.h"
-#include "../handler/get_app_name.h"
-#include "../handler/get_public_key.h"
-#include "../handler/sign_tx.h"
+#include "constants.h"
+#include "globals.h"
+#include "types.h"
+#include "io.h"
+#include "sw.h"
+#include "common/buffer.h"
+#include "handler/get_version.h"
+#include "handler/get_app_name.h"
+#include "handler/get_public_key.h"
+#include "handler/sign_tx.h"
 
 int apdu_dispatcher(const command_t *cmd) {
     if (cmd->cla != CLA) {
@@ -64,11 +65,8 @@ int apdu_dispatcher(const command_t *cmd) {
             buf.offset = 0;
 
             return handler_get_public_key(&buf, (bool) cmd->p1);
-        case SIGN_TX:
-            if ((cmd->p1 == P1_START && cmd->p2 != P2_MORE) ||  //
-                cmd->p1 > P1_MAX ||                             //
-
-                (cmd->p2 != P2_LAST && cmd->p2 != P2_MORE)) {
+        case SIGN_TRANSACTION:
+            if (cmd->p1 != P1_FIRST_CHUNK && cmd->p1 != P1_SUBSEQUENT_CHUNK && cmd->p2 != P2_LAST && cmd->p2 != P2_MORE) {
                 return io_send_sw(SW_WRONG_P1P2);
             }
 

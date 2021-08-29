@@ -1,0 +1,37 @@
+{
+    "expiration": "2021-02-23T22:18:08",
+    "ref_block_num": 51593753,
+    "ref_block_prefix": 1842883823,
+    "operations": [
+        [
+            "comment_options",
+            {
+                "author": "engrave",
+                "permlink": "introduction",
+                "max_accepted_payout": "100000.000 SBD",
+                "percent_hbd": 5000,
+                "allow_votes": true,
+                "allow_curation_rewards": true,
+                "extensions": [
+                    [
+                        0,
+                        {
+                            "beneficiaries": [
+                                {
+                                    "account": "bgornicki",
+                                    "weight": 1000
+                                },
+                                {
+                                    "account": "nicniezgrublem",
+                                    "weight": 2000
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    ],
+    "extensions": [],
+    "signatures": []
+}

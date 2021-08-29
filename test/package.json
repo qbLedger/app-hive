@@ -1,0 +1,27 @@
+{
+    "name": "ledger-app-hive-tests",
+    "version": "1.0.0",
+    "description": "Functional tests of Ledger Hardware Wallet HIVE",
+    "scripts": {
+        "test": "mocha"
+    },
+    "author": "Bartłomiej (@engrave) Górnicki",
+    "license": "MIT",
+    "dependencies": {
+        "@engrave/ledger-app-hive": "3.0.1",
+        "@ledgerhq/hw-transport-node-hid": "6.3.0",
+        "@ledgerhq/hw-transport-node-hid-noevents": "^6.3.0",
+        "@ledgerhq/hw-transport-node-speculos": "^6.3.0",
+        "axios": "^0.21.1",
+        "chai": "4.3.4",
+        "mocha": "9.1.0",
+        "ts-node": "10.2.1",
+        "ts-node-register": "1.0.0",
+        "typescript": "4.3.5"
+    },
+    "devDependencies": {
+        "@types/chai": "4.2.21",
+        "@types/mocha": "^9.0.0",
+        "@types/node": "^16.7.1"
+    }
+}

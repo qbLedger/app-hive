@@ -1,58 +1,62 @@
-#include "wif.h"
+#include <stdint.h>
+#include <string.h>
+
 #include "os.h"
 #include "cx.h"
+#include "common/wif.h"
 #include "common/base58.h"
+
+#include "macros.h"
+
+#ifdef TARGET_NANOS
 #include "errors.h"
-#include <stdint.h>
-#include <string.h>  //memmove, memset
+#endif
 
-// TODO understand WIF creation process and refactor
-uint32_t wif_from_public_key(uint8_t *publicKey, size_t keyLength, char *out, uint32_t outLength) {
-    if (publicKey == NULL || keyLength < 33) {
-        THROW(INVALID_PARAMETER);
+static bool compress_public_key(uint8_t raw_public_key[static PUBKEY_UNCOMPRESSED_LEN], uint8_t *out, size_t out_len) {
+    if (out_len < PUBKEY_COMPRESSED_LEN) {
+        return false;
     }
-    if (outLength < 40) {
-        THROW(EXCEPTION_OVERFLOW);
-    }
-
-    uint8_t temp[33];
-    // is even?
-    temp[0] = (publicKey[64] & 0x1) ? 0x03 : 0x02;
-    memmove(temp + 1, publicKey + 1, 32);
-    return compressed_public_key_to_wif(temp, sizeof(temp), out, outLength);
+    // Because the elliptic curve is symmetrical along its x axis, we only need the x coordinate and
+    // the indicator of y coordinate position
+    out[0] = (raw_public_key[63] & 0x1) ? 0x03 : 0x02;
+    memmove(out + 1, raw_public_key, PUBKEY_COMPRESSED_LEN - 1);
+    return true;
 }
 
-// TODO refactor
-uint32_t compressed_public_key_to_wif(uint8_t *publicKey,
-                                      uint32_t keyLength,
-                                      char *out,
-                                      size_t outLength) {
-    if (keyLength < 33) {
-        THROW(INVALID_PARAMETER);
-    }
-    if (outLength < 40) {
-        THROW(EXCEPTION_OVERFLOW);
+bool wif_from_public_key(uint8_t raw_public_key[static PUBKEY_UNCOMPRESSED_LEN], size_t key_len, char *out, size_t out_len) {
+    if (raw_public_key == NULL || key_len < PUBKEY_UNCOMPRESSED_LEN || out_len < PUBKEY_WIF_STR_LEN) {
+        return false;
     }
 
-    uint8_t temp[37];
-    memset(temp, 0, sizeof(temp));
-    memmove(temp, publicKey, 33);
+    uint8_t compressed[PUBKEY_COMPRESSED_LEN];
 
-    uint8_t check[20];
+    if (!compress_public_key(raw_public_key, compressed, ARRAYLEN(compressed))) {
+        return false;
+    }
+
+    return wif_from_compressed_public_key(compressed, ARRAYLEN(compressed), out, out_len);
+}
+
+bool wif_from_compressed_public_key(uint8_t compressed_key[static PUBKEY_COMPRESSED_LEN], size_t key_len, char *out, size_t out_len) {
+    if (key_len != PUBKEY_COMPRESSED_LEN || out_len < PUBKEY_WIF_STR_LEN) {
+        return false;
+    }
+
+    uint8_t temp[PUBKEY_COMPRESSED_LEN + 4] = {0};
+    memmove(temp, compressed_key, PUBKEY_COMPRESSED_LEN);
+
+    uint8_t hash[CX_RIPEMD160_SIZE] = {0};
     cx_ripemd160_t riprip;
     cx_ripemd160_init(&riprip);
-    cx_hash(&riprip.header, CX_LAST, temp, 33, check, sizeof(check));
-    memmove(temp + 33, check, 4);
+    cx_hash(&riprip.header, CX_LAST, temp, PUBKEY_COMPRESSED_LEN, hash, sizeof(hash));
+    memmove(temp + PUBKEY_COMPRESSED_LEN, hash, 4);
 
-    memset(out, 0, outLength);
-    strcpy(out, "STM");
-    int addressLen = base58_encode(temp, sizeof(temp), out + 3, outLength);
+    memset(out, 0, out_len);
+    strncpy(out, "STM", out_len);
 
-    if (addressLen == -1) {
-        THROW(EXCEPTION_OVERFLOW);
+    if (base58_encode(temp, sizeof(temp), out + 3, out_len) == -1) {
+        return false;
     }
 
-    PRINTF("WIF: %s \n", out);
-
-    return addressLen + 3;
+    return true;
 }

@@ -1,0 +1,17 @@
+{
+    "expiration": "2021-02-23T22:18:08",
+    "ref_block_num": 51593753,
+    "ref_block_prefix": 1842883823,
+    "operations": [
+        [
+            "set_reset_account",
+            {
+                "account": "engrave",
+                "current_reset_account": "bgornicki",
+                "reset_account": "hiveio"
+            }
+        ]
+    ],
+    "extensions": [],
+    "signatures": []
+}

@@ -1,6 +1,7 @@
 stages:
- - test
+ - tests:unit
  - build
+ - tests:functional
  - upload
  - release
 
@@ -8,6 +9,20 @@ variables:
   NANOS_APP: "nanos-$CI_COMMIT_TAG.hex"
   NANOX_APP: "nanox-$CI_COMMIT_TAG.hex"
   PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/binaries/$CI_COMMIT_TAG"
+
+unit-tests:
+  stage: tests:unit
+  image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
+  script:
+    - apt install lcov -y
+    - make
+    - cd unit-tests
+    - cmake -Bbuild -H. && make -C build && CTEST_OUTPUT_ON_FAILURE=1 make -C build test
+    - ./gen_coverage.sh
+  artifacts:
+    paths:
+      - unit-tests/coverage/
+      - bin/
 
 build:
   image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
@@ -25,6 +40,18 @@ build:
   artifacts:
     paths:
       - out/
+
+functional-tests:
+  stage: tests:functional
+  image: docker:git
+  services:
+    - docker:dind
+  script:
+    - apt update && apt install -y npm
+    - docker run -d --rm -v $(realpath .)/bin:/speculos/apps -p 5000:5000 -p 40000:40000 ghcr.io/ledgerhq/speculos:latest --display headless --apdu-port 40000 -s "salon stock memory business develop elegant chronic kite aspect nothing tone essay huge knock flip bar noise main cloth coin flavor only melody gain" apps/app.elf
+    - cd test
+    - npm ci
+    - npm test
 
 upload:
   stage: upload
