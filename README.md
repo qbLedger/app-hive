@@ -152,7 +152,7 @@ the process outputs HTML and LaTeX documentations in `doc/html` and `doc/latex` 
 The flow processed in [Gitlab CI/CD](https://docs.gitlab.com/ee/ci/) is the following:
 
 - Code formatting with [clang-format](http://clang.llvm.org/docs/ClangFormat.html)
-- Compilation of the application for Ledger Nano S and X in [ledger-app-builder](https://github.com/LedgerHQ/ledger-app-builder)
+- Compilation of the application for Ledger Nano S [ledger-app-builder](https://github.com/LedgerHQ/ledger-app-builder)
 - Unit tests of C functions with [cmocka](https://cmocka.org/) (see [unit-tests/](unit-tests/))
 - End-to-end tests with [Speculos](https://github.com/LedgerHQ/speculos) emulator (see [tests/](tests/))
 - Code coverage with [gcov](https://gcc.gnu.org/onlinedocs/gcc/Gcov.html)/[lcov](http://ltp.sourceforge.net/coverage/lcov.php) and upload to [codecov.io](https://about.codecov.io)
@@ -160,7 +160,7 @@ The flow processed in [Gitlab CI/CD](https://docs.gitlab.com/ee/ci/) is the foll
 
 It outputs 4 artifacts:
 
-- `boilerplate-app-debug` within output files of the compilation process in debug mode
+- `hive-app` within output files of the compilation process
 - `speculos-log` within APDU command/response when executing end-to-end tests
 - `code-coverage` within HTML details of code coverage
 - `documentation` within HTML auto-generated documentation

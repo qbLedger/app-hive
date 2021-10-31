@@ -15,5 +15,6 @@ jobs:
         uses: DoozyX/clang-format-lint-action@v0.11
         with:
           source: './src'
+          exclude: './src/glyphs.h ./src/glyphs.c'
           extensions: 'h,c'
           clangFormatVersion: 11
