@@ -31,7 +31,7 @@ static char g_bip32_path[60];
 UX_STEP_NOCB(ux_display_confirm_public_key_step, pn, {&C_icon_eye, "Confirm Public key"});
 
 // For Nano X utilize all three lines of text
-#ifdef TARGET_NANOX
+#if defined(TARGET_NANOX) || defined(TARGET_NANOS2)
 
 // Step with title/text for BIP32 path
 UX_STEP_NOCB(ux_display_path_step,
