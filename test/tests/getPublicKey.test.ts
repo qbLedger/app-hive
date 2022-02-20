@@ -36,7 +36,7 @@ describe('Get public key', async () => {
         const hive = new Hive(transport);
         try {
             await hive.getPublicKey(`48'/13'/0'/0'/0'/0'`, false);
-        } catch (error) {
+        } catch (error: any) {
             assert.equal(error.statusCode, 0xB001); // SW_WRONG_BIP32_PATH
         }
         finally {
@@ -49,7 +49,7 @@ describe('Get public key', async () => {
         const hive = new Hive(transport);
         try {
             await hive.getPublicKey(`48'/12'/0'/0'/0'/0'`, false);
-        } catch (error) {
+        } catch (error: any) {
             assert.equal(error.statusCode, 0xB001); // SW_WRONG_BIP32_PATH
         }
         finally {
@@ -62,7 +62,7 @@ describe('Get public key', async () => {
         const hive = new Hive(transport);
         try {
             await hive.getPublicKey(`47'/12'/0'/0'/0'/0'`, false);
-        } catch (error) {
+        } catch (error: any) {
             assert.equal(error.statusCode, 0xB001); // SW_WRONG_BIP32_PATH
         }
         finally {

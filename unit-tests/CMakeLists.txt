@@ -37,10 +37,10 @@ add_compile_definitions(
   TEST 
   APPNAME="HIVE" 
   HAVE_SECP256K1_CURVE
-  APPVERSION="1.0.0"
+  APPVERSION="1.0.1"
   MAJOR_VERSION=1
   MINOR_VERSION=0
-  PATCH_VERSION=0
+  PATCH_VERSION=1
   OS_IO_SEPROXYHAL
   HAVE_BAGL
   HAVE_UX_FLOW
@@ -58,7 +58,9 @@ add_compile_definitions(
   IO_SEPROXYHAL_BUFFER_SIZE_B=128
   HAVE_SHA224
   HAVE_HASH HAVE_RIPEMD160
-  HAVE_ECC)
+  HAVE_ECC
+  BAGL_WIDTH=128
+  BAGL_HEIGHT=64)
 
 include_directories(../src)
 include_directories(/opt/nanos-secure-sdk/include)
@@ -87,6 +89,7 @@ add_executable(test_decoder_weight transaction/decoders/test_decoder_weight.c)
 add_executable(test_decoder_empty_extensions transaction/decoders/test_decoder_empty_extensions.c)
 add_executable(test_decoder_asset transaction/decoders/test_decoder_asset.c)
 add_executable(test_decoder_authority_type transaction/decoders/test_decoder_authority_type.c)
+add_executable(test_decoder_optional_authority_type transaction/decoders/test_decoder_optional_authority_type.c)
 add_executable(test_decoder_public_key transaction/decoders/test_decoder_public_key.c)
 add_executable(test_decoder_beneficiaries_extensions transaction/decoders/test_decoder_beneficiaries_extensions.c)
 add_executable(test_get_operation_parser transaction/test_get_operation_parser.c)
@@ -129,6 +132,7 @@ target_link_libraries(test_decoder_weight PUBLIC cmocka gcov transaction_parse m
 target_link_libraries(test_decoder_empty_extensions PUBLIC cmocka gcov transaction_parse mocks)
 target_link_libraries(test_decoder_asset PUBLIC cmocka gcov transaction_parse mocks)
 target_link_libraries(test_decoder_authority_type PUBLIC cmocka gcov transaction_parse wif mocks)
+target_link_libraries(test_decoder_optional_authority_type PUBLIC cmocka gcov transaction_parse wif mocks)
 target_link_libraries(test_decoder_public_key PUBLIC cmocka gcov transaction_parse wif mocks)
 target_link_libraries(test_decoder_beneficiaries_extensions PUBLIC cmocka gcov transaction_parse wif mocks)
 target_link_libraries(test_get_operation_parser PUBLIC cmocka gcov parsers transaction_parse mocks -Wl,--wrap,os_longjmp)
@@ -155,6 +159,7 @@ add_test(test_decoder_weight test_decoder_weight)
 add_test(test_decoder_empty_extensions test_decoder_empty_extensions)
 add_test(test_decoder_asset test_decoder_asset)
 add_test(test_decoder_authority_type test_decoder_authority_type)
+add_test(test_decoder_optional_authority_type test_decoder_optional_authority_type)
 add_test(test_decoder_public_key test_decoder_public_key)
 add_test(test_get_operation_parser test_get_operation_parser)
 add_test(test_decoder_beneficiaries_extensions test_decoder_beneficiaries_extensions)

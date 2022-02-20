@@ -12,6 +12,7 @@ bool decoder_array_of_strings(buffer_t *buf, field_t *field, bool should_hash_on
 bool decoder_array_of_u64(buffer_t *buf, field_t *field, bool should_hash_only);
 bool decoder_asset(buffer_t *buf, field_t *field, bool should_hash_only);
 bool decoder_authority_type(buffer_t *buf, field_t *field, bool should_hash_only);
+bool decoder_optional_authority_type(buffer_t *buf, field_t *field, bool should_hash_only);
 bool decoder_boolean(buffer_t *buf, field_t *field, bool should_hash_only);
 bool decoder_date_time(buffer_t *buf, field_t *field, bool should_hash_only);
 bool decoder_operation_name(buffer_t *buf, field_t *field, bool should_hash_only);
