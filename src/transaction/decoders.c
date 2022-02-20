@@ -358,16 +358,77 @@ bool decoder_authority_type(buffer_t *buf, field_t *field, bool should_hash_only
     char value[MEMBER_SIZE(field_t, value)] = {0};
     char wif[PUBKEY_WIF_STR_LEN] = {0};
 
+    // weight_threshold
+    if (!buffer_read_u32(buf, &weight, LE) || !buffer_read_u8(buf, &count)) {
+        return false;
+    }
+
+    snprintf(value, sizeof(value), "Weight: %d, [ ", weight);
+
+    // account_auths count
+    for (uint8_t i = 0; i < count; i++) {
+        memset(tmp, 0, sizeof(tmp));
+
+        uint8_t string_length;
+
+        // clang-format off
+    if (!buffer_read_u8(buf, &string_length) || 
+        string_length >= sizeof(tmp) || 
+        !buffer_move_partial(buf, tmp, sizeof(tmp), string_length) ||
+        !buffer_read_u16(buf, &threshold, LE)) {
+        return false;
+    }
+        // clang-format on
+
+        snprintf(value + strlen(value), sizeof(value) - strlen(value), i == count - 1 ? "[ %s, %d ]" : "[ %s, %d ], ", tmp, threshold);
+    }
+
+    snprintf(value + strlen(value), sizeof(value) - strlen(value), " ], [ ");
+
+    // key_auths
+    if (!buffer_read_u8(buf, &count)) {
+        return false;
+    }
+
+    for (uint8_t i = 0; i < count; i++) {
+        memset(tmp, 0, sizeof(tmp));
+        memset(wif, 0, sizeof(wif));
+
+        if (!buffer_move_partial(buf, tmp, sizeof(tmp), PUBKEY_COMPRESSED_LEN) || !buffer_read_u16(buf, &threshold, LE) ||
+            !wif_from_compressed_public_key((uint8_t *) tmp, PUBKEY_COMPRESSED_LEN, wif, PUBKEY_WIF_STR_LEN)) {
+            return false;
+        }
+
+        snprintf(value + strlen(value), sizeof(value) - strlen(value), i == count - 1 ? "[ %s, %d ]" : "[ %s, %d ], ", wif, threshold);
+    }
+
+    snprintf(value + strlen(value), sizeof(value) - strlen(value), " ]");
+
+    if (should_hash_only) {
+        cx_hash((cx_hash_t *) &G_context.tx_info.sha, 0, buf->ptr + initial_offset, buf->offset - initial_offset, NULL, 0);
+    } else {
+        snprintf(field->value, MEMBER_SIZE(field_t, value), "%s", value);
+    }
+    return true;
+}
+
+bool decoder_optional_authority_type(buffer_t *buf, field_t *field, bool should_hash_only) {
+    size_t initial_offset = buf->offset;
+
+    uint8_t count;
+    uint16_t threshold;
+    uint32_t weight;
+
+    uint8_t tmp[MAX_ACCOUNT_NAME_LEN] = {0};
+    char value[MEMBER_SIZE(field_t, value)] = {0};
+    char wif[PUBKEY_WIF_STR_LEN] = {0};
+
     // this field may be optional so we need to check first byte
     if (!buffer_read_u8(buf, &count)) {
         return false;
     }
 
     if (count != 0) {
-        if (!buffer_seek_set(buf, initial_offset)) {
-            return false;
-        };
-
         // weight_threshold
         if (!buffer_read_u32(buf, &weight, LE) || !buffer_read_u8(buf, &count)) {
             return false;

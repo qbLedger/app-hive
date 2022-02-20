@@ -27,16 +27,6 @@
                         ]
                     ]
                 },
-                "posting": {
-                    "weight_threshold": 1,
-                    "account_auths": [],
-                    "key_auths": [
-                        [
-                            "STM57zUjDUTq2xnfoPA8ukKB6SY4jVPknkiNrEWZdZi2XgnK6J3yc",
-                            1
-                        ]
-                    ]
-                },
                 "memo_key": "STM7vws7RdiBQiegnzjA3wYdemLENGbw765iA8VhE4UYCgS48yMr3",
                 "json_metadata": "{\"name\": \"JSON Metadata changed\"}"
             }

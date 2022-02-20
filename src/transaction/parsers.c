@@ -97,7 +97,7 @@ const parser_t account_create_parser = {
 
 // 10 account_update
 const parser_t account_update_parser = {
-    .decoders = {&decoder_operation_name, &decoder_string, &decoder_authority_type, &decoder_authority_type, &decoder_authority_type, &decoder_public_key, &decoder_string},
+    .decoders = {&decoder_operation_name, &decoder_string, &decoder_optional_authority_type, &decoder_optional_authority_type, &decoder_optional_authority_type, &decoder_public_key, &decoder_string},
     .names = {"Operation", "Account", "Owner", "Active", "Posting", "Memo key", "JSON metadata"},
     .size = 7
 };
