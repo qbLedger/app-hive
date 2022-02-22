@@ -21,7 +21,7 @@ describe('Sign transaction', async () => {
         prepareExpectedSignature('feed_publish', '1f1b769e61faaad846af789cb0221bb5dd9ea0acf26fe379ed26ae2035a7505bcc52303e227031b1c576eecc4603e11df6e3c4902304b7332c3c8fbe3028a2a7c1'),
         prepareExpectedSignature('convert', '207463ec7308f71f3e0411c20bfc0bc7cbdc3c9b7ae9f89a4fff5f0b88af3e21eb03e48692a6ceaadf6fff34f64db49133f66cf76f21a3290ac8850ed2fd5ec545'),
         prepareExpectedSignature('account_create', '2076eec65df37a6b5915a1acc7dbf0c78e944ea3775defd25ca2b0f8c92dcc3acc5c6a5b89158cc8bc8ad028f71823e6882cd0602ef73c8ff92410b871957f57a9'),
-        prepareExpectedSignature('account_update', '204966ef6f7337be3f6e6b52dd5e4ab06b23014ff49cc229ebebffe3a068f75a4a5cbe55921f88e80179266433ee517a1942bce60b0f43a6a1b104b07c783f1482'),
+        prepareExpectedSignature('account_update', '1f513f090e1bdb2cf7733d6f546e45a3a22b02da84c8ae79445998355a0158a00338817c3b7987d6b6f319b0365bb353cfe21257c45530397c819c84ea65b9de52'),
         prepareExpectedSignature('witness_update', '205cab743fbead0fac64f2390c807ff7ab0c730a5389d5981f6bd57835b93e3a53360b3b9161eb7235f99e7f4524dea6d4cc9ef596b596b4f315feeb80bc326e7d'),
         prepareExpectedSignature('account_witness_vote', '2079bd3738a76f2fbd303db6464936bd8b9c602857785d56457cc416ca3847113433e90882f1c55436d17da142dfb414c596cb443fd3a401bc8002ed2d24179903'),
         prepareExpectedSignature('account_witness_proxy', '2075a24d19d360896f4d8d6c38800cd0fd9d7194c2af2c8918489d325b47ddeaef2dc4fd15e03c5caecbf4eda5d14f3b06fe2d940125be90bb03622c437022672b'),

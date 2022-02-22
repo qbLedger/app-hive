@@ -11,11 +11,12 @@
 #include "types.h"
 #include "globals.h"
 
-static void test_decoder_authority_type(void **state) {
+static void test_decoder_optional_authority_type(void **state) {
     (void) state;
 
     // clang-format off
     uint8_t data[] = {
+        0x01,                                       // field exists
         0x01, 0x00, 0x00, 0x00,                     // uint32_t weight_threshold
         0x01,                                       // uint8_t account_auths length
         0x07,                                       // uint8_t string length
@@ -57,24 +58,28 @@ static void test_decoder_authority_type(void **state) {
     expect_any(__wrap_cx_hash_no_throw, out_len);
 
     // invalid length
-    assert_false(decoder_authority_type(&buffer_invalid, &field, false));
+    assert_false(decoder_optional_authority_type(&buffer_invalid, &field, false));
 
     // invalid length (cannot read key auths)
     buffer_valid.size = 15;
     assert_true(buffer_seek_set(&buffer_valid, 0));
-    assert_false(decoder_authority_type(&buffer_valid, &field, false));
+    assert_false(decoder_optional_authority_type(&buffer_valid, &field, false));
 
     buffer_valid.size = sizeof(data);
     assert_true(buffer_seek_set(&buffer_valid, 0));
-    assert_true(decoder_authority_type(&buffer_valid, &field, false));
+    assert_true(decoder_optional_authority_type(&buffer_valid, &field, false));
     assert_string_equal(field.value, "Weight: 1, [ [ engrave, 1 ] ], [ [ STM5r6G7EsPUUPYojYhd9nt8dEZ4fwBNUbz2nQyxXHf56ccp8v9j5, 1 ] ]");
+
+    assert_true(decoder_optional_authority_type(&buffer_field_optional, &field, false));
+    assert_string_equal(field.value, "no changes");
 }
 
-static void test_decoder_authority_type_hashing(void **state) {
+static void test_decoder_optional_authority_type_hashing(void **state) {
     (void) state;
 
     // clang-format off
     uint8_t data[] = {
+        0x01,                                       // field exists
         0x01, 0x00, 0x00, 0x00,                     // uint32_t weight_threshold
         0x01,                                       // uint8_t account_auths length
         0x07,                                       // uint8_t string length
@@ -123,14 +128,14 @@ static void test_decoder_authority_type_hashing(void **state) {
     expect_value(__wrap_cx_hash_no_throw, out_len, 0);
 
     // expect to success
-    assert_true(decoder_authority_type(&buffer_valid, &field, true));
+    assert_true(decoder_optional_authority_type(&buffer_valid, &field, true));
 
     // expect it to not modify the output field, just hash data
     assert_string_equal(field.value, "");
 }
 
 int main() {
-    const struct CMUnitTest tests[] = {cmocka_unit_test(test_decoder_authority_type), cmocka_unit_test(test_decoder_authority_type_hashing)};
+    const struct CMUnitTest tests[] = {cmocka_unit_test(test_decoder_optional_authority_type), cmocka_unit_test(test_decoder_optional_authority_type_hashing)};
 
     return cmocka_run_group_tests(tests, NULL, NULL);
 }
