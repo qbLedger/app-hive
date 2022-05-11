@@ -100,3 +100,23 @@ parser_status_e transaction_parse(buffer_t *buf) {
 
     return (buf->offset == buf->size) ? PARSING_OK : WRONG_LENGTH_ERROR;
 }
+
+/**
+ * Parse transaction hash and path
+ * */
+parser_status_e hash_parse(buffer_t *buf) {
+    /* Parse:
+     *  - BIP32 path
+     */
+    if (!buffer_read_u8(buf, &G_context.bip32_path_len) || !buffer_read_bip32_path(buf, G_context.bip32_path, (size_t) G_context.bip32_path_len)) {
+        return BIP32_PATH_PARSING_ERROR;
+    }
+    /* Parse:
+     *  - sha256 hash
+     */
+    if (!buffer_move(buf, G_context.hash_info.hash, MEMBER_SIZE(hash_ctx_t, hash))) {
+        return WRONG_LENGTH_ERROR;
+    }
+
+    return PARSING_OK;
+}
