@@ -54,9 +54,8 @@ UX_STEP_NOCB(ux_display_tx_field_step,
                  .text = g_tx_field_parsed.value,
              });
 
-#else
-
 // For Nano X utilize all three lines of text
+#elif defined(TARGET_NANOX) || defined(TARGET_NANOS2)
 
 // Step with title/text for BIP32 path
 UX_STEP_NOCB(ux_display_tx_path_step,
